@@ -15,9 +15,14 @@ class InstaPostCellTableViewCell: UITableViewCell {
     
     @IBOutlet weak var postedCaption: UILabel!
     
+    @IBOutlet weak var authorLabel: UILabel!
     var getPhotoandCaption: PFObject! {
         didSet {
-            self.postedCaption.text = getPhotoandCaption["caption"] as? String
+            //minorText:String = getPhotoandCaption["caption"] as? String
+            self.postedCaption.text = " \(getPhotoandCaption["caption"])"
+            self.authorLabel.text = " by \(getPhotoandCaption["author"]!.username!! as String)"
+            print(PFUser.currentUser()!.username! as String)
+            
             
             if let userPicture = getPhotoandCaption["media"] as? PFFile {
                 userPicture.getDataInBackgroundWithBlock { (imageData: NSData?, error: NSError?) -> Void in
