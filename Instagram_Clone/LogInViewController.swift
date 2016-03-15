@@ -45,7 +45,7 @@ class LogInViewController: UIViewController {
         let newUser = PFUser()
         
         if userNameField.text == "" || passWordField.text == "" {
-            print("No username/password inputted")
+            print("no input")
         }
         else {
             newUser.username = userNameField.text

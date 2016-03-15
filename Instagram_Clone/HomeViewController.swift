@@ -24,7 +24,10 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadList:",name:"load", object: nil)
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refresh:", forControlEvents: .ValueChanged)
+        tableView.addSubview(refreshControl)
+        
         
     }
     
@@ -35,7 +38,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func getPosts()
     {
-        let query = PFQuery(className: "UserMedia")
+        let query = PFQuery(className: "UserMediaInsta")
         query.orderByDescending("createdAt")
         query.includeKey("author")
         query.limit = 20
@@ -52,9 +55,13 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    func loadList(notification: NSNotification){
+    
+    func refresh(refreshControl: UIRefreshControl) {
+        // Do your job, when done:
+        
         self.getPosts()
         self.tableView.reloadData()
+        refreshControl.endRefreshing()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

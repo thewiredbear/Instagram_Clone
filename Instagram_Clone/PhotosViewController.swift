@@ -61,44 +61,20 @@ class PhotosViewController: UIViewController,UINavigationControllerDelegate, UII
         }
         
         
-        let secondsTime = 2.5
-        let delayTime = secondsTime * Double(NSEC_PER_SEC)
-        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayTime))
-        
-        dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-            
-            NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-            
-            self.tabBarController!.selectedIndex = 0;
-            
-        })
+        self.tabBarController!.selectedIndex = 0;
         
     }
     
-    func resize(image: UIImage, newSize: CGSize) -> UIImage {
-        let resizeImage = UIImageView(frame: CGRectMake(0, 0, newSize.width, newSize.height))
-        resizeImage.contentMode = UIViewContentMode.ScaleAspectFill
-        resizeImage.image = image
-        
-        UIGraphicsBeginImageContext(resizeImage.frame.size)
-        resizeImage.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage
-    }
     
     class UserMedia: NSObject {
         
         class func postUserImage(image: UIImage?, withCaption caption: String?, withCompletion completion: PFBooleanResultBlock?) {
-            let media = PFObject(className: "UserMedia")
+            let media = PFObject(className: "UserMediaInsta")
             
             // Add relevant fields to the object
             media["media"] = getPFFileFromImage(image) // PFFile column type
             media["author"] = PFUser.currentUser() // Pointer column type that points to PFUser
             media["caption"] = caption
-            media["likesCount"] = 0
-            media["commentsCount"] = 0
-            
             // Save object (following function will save the object in Parse asynchronously)
             media.saveInBackgroundWithBlock(completion)
         }
